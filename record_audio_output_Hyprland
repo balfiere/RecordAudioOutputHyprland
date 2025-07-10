@@ -1,0 +1,48 @@
+#!/bin/sh
+# this script defaults to using ffmpeg to record audio
+# comment out the ffmpeg lines if you want to use parec or pw-record
+# and uncomment the parec or pw-record lines
+
+# Check if audio is being recorded
+# if pgrep parec
+# if pgrep pw-record
+if pgrep ffmpeg
+then 
+
+	# Stop recording audio
+	# pkill parec
+    # pkill pw-record
+	pkill ffmpeg
+	
+	# Notify recording has finished
+	notify-send "recording finished"
+	
+	# Send signal to waybar
+	sleep 0.5
+	pkill -RTMIN+8 waybar
+
+else
+	# 5-character random string
+	rand=$(head /dev/urandom | tr -dc 'A-Za-z0-9' | head -c6)
+
+	# Construct filename
+	filename="$(xdg-user-dir MUSIC)/recordings/out_${rand}.mp3"
+	
+	# Notify recording has started
+	notify-send "recording started"
+
+	# Get audio source
+	#targetSink="alsa_output.pci-0000_00_1b.0.analog-stereo.monitor" # backup
+	targetSink="@DEFAULT_MONITOR@"
+
+	# Record audio to the file
+	# parec -d $targetSink | lame -r -V7 - $filename &
+    # pw-record -P '{ stream.capture.sink=true }' - | lame -r -s 48 -m s -V7 - $filename &
+	ffmpeg -f pulse -ac 2 -i $targetSink -acodec libmp3lame -ab 320k $filename &
+	
+	# Send signal to waybar
+	pkill -RTMIN+8 waybar
+
+	# Copy the file to the clipboard
+	echo "file://${filename}"| wl-copy --type text/uri-list
+fi

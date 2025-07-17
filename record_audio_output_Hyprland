@@ -38,7 +38,7 @@ else
 	# Record audio to the file
 	# parec -d $targetSink | lame -r -V7 - $filename &
     # pw-record -P '{ stream.capture.sink=true }' - | lame -r -s 48 -m s -V7 - $filename &
-	ffmpeg -f pulse -ac 2 -i $targetSink -acodec libmp3lame -ab 320k $filename &
+	ffmpeg -f pulse -ac 2 -i $targetSink -acodec libmp3lame -ab 320k $filename & # can lower the bitrate from 320k to save space
 	
 	# Send signal to waybar
 	pkill -RTMIN+8 waybar

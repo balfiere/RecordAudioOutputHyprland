@@ -3,7 +3,7 @@ A variation of JayXT's [RecordAudioOutput](https://github.com/JayXT/RecordAudioO
 
 ![a recording icon](image-1.png)
 
-Defaults to using ffmpeg to record audio, but parec or pw_record can be used as well (see script on what lines to modify).
+Defaults to using ffmpeg to record audio, but parec or pw-record can be used as well (see script on what lines to modify).
 
 ## How to use
 
@@ -16,7 +16,7 @@ In your waybar config file (`~/.config/waybar/config`), add
 		"format": "{}",
 		"exec": "echo ''",
 		"tooltip": "false",
-		"exec-if": "pgrep ffmpeg", // replace ffmpeg with parec or pw_record if using those instead
+		"exec-if": "pgrep ffmpeg", // replace ffmpeg with parec or pw-record if using those instead
 		"interval": "once",
         "on-click": "exec $HOME/scripts/record_audio_output_Hyprland",
 		"signal": 8
